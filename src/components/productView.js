@@ -1,13 +1,13 @@
 import React, {PureComponent} from 'react';
-import { Text, StyleSheet, View, Platform, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, ViewPropTypes } from "react-native";
 
 export default class ProductView extends PureComponent {
   render(){
-    const { product, onClick } = this.props;
+    const { product, onClick, containerStyle } = this.props;
     
     return (
       <TouchableOpacity onPress={onClick} >
-        <View style={styles.container} >
+        <View style={containerStyle} >
           <Text>{product.Product.Name}</Text>
         </View>
       </TouchableOpacity>
@@ -15,11 +15,16 @@ export default class ProductView extends PureComponent {
   }
 } 
 
-const styles = StyleSheet.create({
-  container: {
+ProductView.propTypes = {
+  containerStyle: ViewPropTypes.style,
+};
+
+ProductView.defaultProps = {
+  containerStyle: {
     borderRadius: 5,
     margin: 5,
+    padding: 5,
     minHeight: 30,
     backgroundColor: "white"
   }
-})
+};
