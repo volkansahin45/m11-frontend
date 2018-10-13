@@ -26,8 +26,8 @@ class Home extends React.Component {
     this.setState({hasCameraPermission: status === 'granted'});
   }
 
-  onPressLookUpButton = () => {
-    this.props.navigation.navigate("ProductListPage")  
+  onPressExploreButton = () => {
+    this.props.navigation.navigate("ProductListPage");
   }
 
   render() {
@@ -50,7 +50,7 @@ class Home extends React.Component {
           </View>
           <Button
             title="Ürünlere Göz At"
-            onPress={this.onPressLookUpButton}
+            onPress={this.onPressExploreButton}
           />
         </View>
       </SafeAreaView>
