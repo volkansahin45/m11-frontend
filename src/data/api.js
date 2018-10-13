@@ -5,7 +5,7 @@ class Api {
     return this.fetch(BASE_URL + "/ListBestProducts");
   }
 
-  getProductDetail(barcode){
+  getProductPricesByBarcode(barcode){
     return this.fetch(BASE_URL + "/GetProductDetailByBarcode?productId=" + barcode)
   }
 

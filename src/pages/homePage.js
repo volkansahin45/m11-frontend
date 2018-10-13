@@ -58,8 +58,7 @@ class Home extends React.Component {
   }
 
   handleBarCodeScanned = ({ type, data }) => {
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    this.props.navigation.navigate("ProductDetailPage");
+    this.props.navigation.navigate("ProductDetailPage", { barcode: data });
   }
 
 }
