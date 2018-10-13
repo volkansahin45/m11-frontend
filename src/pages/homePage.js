@@ -3,6 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableHighlight,
+  Image,
   Button
 } from "react-native";
 
@@ -10,11 +12,19 @@ import { connect } from 'react-redux';
 import { SafeAreaView } from "react-navigation";
 import { BarCodeScanner, Permissions } from 'expo';
 
-import { getMostScannedProducts } from "../actions/index";
-
 class Home extends React.Component {
-  static navigationOptions = {
-    headerTitle: "Home"
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: "Home",
+      headerRight: (
+        <TouchableHighlight
+          underlayColor="#fff"
+          onPress={() => navigation.navigate('ProductListPage')}
+        >
+          <Image source={require("../../assets/searchicon.png")} style={{width: 30, height: 30}} />
+        </TouchableHighlight>
+      )
+    };
   };
 
   state = {
@@ -70,7 +80,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getMostScannedProducts
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

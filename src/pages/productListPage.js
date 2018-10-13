@@ -1,24 +1,42 @@
 import React from "react";
 import {
   FlatList,
-  StyleSheet
+  StyleSheet,
+  View,
+  TextInput,
+  Text
 } from "react-native";
 
 import { connect } from "react-redux";
+import _ from "lodash";
 
-import { getMostScannedProducts } from "../actions/index";
+import { getProducts } from "../actions/product";
 
 import ProductView from "../components/productView";
+import WaitingIndicator from "../components/waitingIndicator";
 
 
 class ProductListPage extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({navigation}) => ({
     headerTitle: "Ürünlere Göz At"
+  })
+
+  state = {
+    keyword: ""
   }
 
   async componentWillMount() {
-    this.props.getMostScannedProducts();
+    this.props.getProducts("");
   }
+
+  onSearchInputChanged = (keyword) => {
+    this.setState({keyword});
+    this.getProducts(keyword);
+  }
+
+  getProducts = _.debounce((keyword) => {
+    keyword !== "" && this.props.getProducts(keyword);
+  }, 500);
 
   onClickProduct = () => {
     alert("onClickProduct");
@@ -32,14 +50,37 @@ class ProductListPage extends React.Component {
     );
   }
 
-  render() {
-    return (
-        <FlatList
-          keyExtractor={(item) => item.id + ""}
-          data={this.props.products}
-          renderItem={this.renderItem}
+  renderLoadingIndicator = () => (
+    <WaitingIndicator />
+  )
+
+  renderError = () => (
+    <Text>Problem</Text>
+  )
+  
+  renderView = () => (
+    <View style={{ flex: 1 }}>
+        <TextInput
+          autoFocus
+          style={{height: 40, backgroundColor: "#fff"}}
+          onChangeText={this.onSearchInputChanged}
+          value={this.state.keyword}
+          placeholder="Ara"
         />
-    );
+        {
+          this.props.loading ? 
+          this.renderLoadingIndicator() :
+          <FlatList
+            keyExtractor={(item) => item.title}
+            data={this.props.products}
+            renderItem={this.renderItem}
+          />
+        }
+      </View>
+  )
+
+  render() {
+    return this.props.failed ? this.renderError() : this.renderView();
   }
 }
 
@@ -47,11 +88,13 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => ({
-  products: state.products.get("mostScannedProducts")
+  loading: state.products.get("loading"),
+  products: state.products.get("products"),
+  failed: state.products.get("failed")
 });
 
 const mapDispatchToProps = {
-  getMostScannedProducts
+  getProducts
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);

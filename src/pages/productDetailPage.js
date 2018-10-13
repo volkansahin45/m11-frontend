@@ -8,7 +8,7 @@ import {
 
 import { connect } from "react-redux";
 
-import { getProductPricesByBarcode } from "../actions/index";
+import { getProductPricesByBarcode } from "../actions/product";
 
 import ProductView from "../components/productView";
 import WaitingIndicator from "../components/waitingIndicator"

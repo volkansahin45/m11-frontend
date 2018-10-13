@@ -1,28 +1,27 @@
 import api from "../data/api";
 
-export const GET_MOST_SCANNED_PRODUCTS_START = 'GET_MOST_SCANNED_PRODUCTS_START';
-export const GET_MOST_SCANNED_PRODUCTS_SUCCESS = 'GET_MOST_SCANNED_PRODUCTS_SUCCESS';
-export const GET_MOST_SCANNED_PRODUCTS_FAILED = 'GET_MOST_SCANNED_PRODUCTS_FAIL';
+export const GET_PRODUCTS_START = 'GET_PRODUCTS_START';
+export const GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS';
+export const GET_PRODUCTS_FAILED = 'GET_PRODUCTS_FAIL';
 
 export const GET_PRODUCT_BY_BARCODE_START = 'GET_PRODUCT_BY_BARCODE_START';
 export const GET_PRODUCT_BY_BARCODE_SUCCESS = 'GET_PRODUCT_BY_BARCODE_SUCCESS';
 export const GET_PRODUCT_BY_BARCODE_FAILED = 'GET_PRODUCT_BY_BARCODE_FAIL';
 
-export const getMostScannedProducts = () => (dispatch) => {
+export const getProducts = (keyword) => (dispatch) => {
   dispatch({
-    type: GET_MOST_SCANNED_PRODUCTS_START,
+    type: GET_PRODUCTS_START,
   });
-  return api.getMostScannedProducts()
+  return api.getProducts(keyword)
     .then((responseJson) => {
     dispatch({
-      type: GET_MOST_SCANNED_PRODUCTS_SUCCESS,
+      type: GET_PRODUCTS_SUCCESS,
       data: responseJson,
     });
     return responseJson;
   }).catch((error) => {
-    console.log("error: ", error)
     dispatch({
-      type: GET_MOST_SCANNED_PRODUCTS_FAILED,
+      type: GET_PRODUCTS_FAILED,
       error
     });
   });
