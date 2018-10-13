@@ -33,8 +33,6 @@ class ProductListPage extends React.Component {
   }
 
   render() {
-
-    console.log("data: ", this.props.products)
     return (
         <FlatList
           keyExtractor={(item) => item.id + ""}
