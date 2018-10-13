@@ -31,8 +31,7 @@ class ProductDetailPage extends React.Component {
       this.setState({
         products: response
       })
-    }).catch((error) => {
-    });;
+    })
   }
 
   renderLoadingIndicator = () => (
