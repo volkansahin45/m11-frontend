@@ -2,7 +2,6 @@ let BASE_URL = "http://192.168.1.192:5001";
 
 class Api {
   getMostScannedProducts(){
-    console.log('data:');
     return this.fetch(BASE_URL + "/ListBestProducts");
   }
 
