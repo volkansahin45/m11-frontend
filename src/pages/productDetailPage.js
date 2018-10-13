@@ -71,13 +71,6 @@ class ProductDetailPage extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  activityIndicator: {
-    flex: 1,
-    alignSelf: "center"
-  }
-})
-
 const mapStateToProps = state => ({
   loading: state.products.get("loading"),
   failed: state.products.get("failed")
