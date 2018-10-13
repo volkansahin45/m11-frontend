@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { connect } from 'react-redux';
+import { SafeAreaView } from "react-navigation";
 import { BarCodeScanner, Permissions } from 'expo';
 
 import { getMostScannedProducts } from "../actions/index";
@@ -39,18 +40,20 @@ class Home extends React.Component {
       return <Text>No access to camera</Text>;
     }
     return (
-      <View style={{ flex: 1, justifyContent:"space-between" }}>
-        <View style={{flex: 1}}>
-          <BarCodeScanner
-            onBarCodeScanned={this.handleBarCodeScanned}
-            style={StyleSheet.absoluteFill}
+      <SafeAreaView style={{flex: 1}}>
+        <View style={{ flex: 1, justifyContent:"space-between" }}>
+          <View style={{flex: 1}}>
+            <BarCodeScanner
+              onBarCodeScanned={this.handleBarCodeScanned}
+              style={StyleSheet.absoluteFill}
+            />
+          </View>
+          <Button
+            title="Ürünlere Göz At"
+            onPress={this.onPressLookUpButton}
           />
         </View>
-        <Button
-          title="Ürünlere Göz At"
-          onPress={this.onPressLookUpButton}
-        />
-      </View>
+      </SafeAreaView>
     );
   }
 
