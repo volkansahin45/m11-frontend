@@ -36,20 +36,21 @@ class ProductListPage extends React.Component {
     alert("onClickProduct");
   };
 
-  renderItem = item => {
-    return x;
-  };
-
   renderLoadingIndicator = () => <WaitingIndicator />;
 
   renderError = () => <Text>Problem</Text>;
 
   renderView = () => (
     <View style={{ flex: 1, padding: 10 }}>
-      <Basket />
+      <Basket onClick={() => this.props.navigation.navigate("BasketPage")} />
       <TextInput
         autoFocus
-        style={{ height: 40, backgroundColor: "#fff", padding: 5, marginBottom: 10 }}
+        style={{
+          height: 40,
+          backgroundColor: "#fff",
+          padding: 5,
+          marginBottom: 10
+        }}
         onChangeText={this.onSearchInputChanged}
         value={this.state.keyword}
         placeholder="Ara"
@@ -60,7 +61,7 @@ class ProductListPage extends React.Component {
         <FlatList
           keyExtractor={item => item.Id}
           data={this.props.products}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <ProductView product={item} onClick={this.onClickProduct} />
           )}
         />

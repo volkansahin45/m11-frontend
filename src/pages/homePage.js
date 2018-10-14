@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Button,
+  Button
 } from "react-native";
 import { connect } from "react-redux";
 import { SafeAreaView } from "react-navigation";
@@ -64,8 +64,9 @@ class Home extends React.Component {
             />
           </View>
           <Button title="Ürünlere Göz At" onPress={this.onPressExploreButton} />
-
-          <Basket />
+          <Basket
+            onClick={() => this.props.navigation.navigate("BasketPage")}
+          />
         </View>
       </SafeAreaView>
     );
@@ -78,8 +79,7 @@ class Home extends React.Component {
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = {
-};
+const mapDispatchToProps = {};
 
 export default connect(
   mapStateToProps,

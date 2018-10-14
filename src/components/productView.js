@@ -4,7 +4,8 @@ import {
   View,
   TouchableOpacity,
   ViewPropTypes,
-  Image
+  Image,
+  StyleSheet
 } from "react-native";
 import { connect } from "react-redux";
 
@@ -14,12 +15,12 @@ import basketicon from "../../assets/basketicon.png";
 
 class ProductView extends PureComponent {
   render() {
-    const { product, onClick, containerStyle, addProductToBasket } = this.props;
+    const { product, onClick, addProductToBasket } = this.props;
     return (
       <TouchableOpacity onPress={onClick}>
-        <View style={containerStyle}>
+        <View style={styles.containerStyle}>
           <Text style={{ flex: 1, fontSize: 17 }}>{product.Name}</Text>
-          <TouchableOpacity onPress={() => addProductToBasket(product.title)}>
+          <TouchableOpacity onPress={() => addProductToBasket(product)}>
             <Image style={{ width: 30, height: 30 }} source={basketicon} />
           </TouchableOpacity>
         </View>
@@ -32,7 +33,7 @@ ProductView.propTypes = {
   containerStyle: ViewPropTypes.style
 };
 
-ProductView.defaultProps = {
+const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
     flexDirection: "row",
@@ -42,7 +43,7 @@ ProductView.defaultProps = {
     padding: 10,
     backgroundColor: "white"
   }
-};
+});
 
 const mapStateToProps = state => ({});
 
