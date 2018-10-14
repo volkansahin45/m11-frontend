@@ -1,25 +1,26 @@
-let BASE_URL = "http://192.168.1.192:5001";
+let BASE_URL = "http://localhost:5002";
 
 class Api {
-  getProducts(keyword){
-    //return this.fetch(BASE_URL + "/ListBestProducts");
-    return this.fetch("https://jsonplaceholder.typicode.com/todos/" + keyword);
+  getProducts(keyword) {
+    return this.fetch(BASE_URL + "/GetProductList?input=" + keyword);
   }
 
-  getProductPricesByBarcode(barcode){
-    return this.fetch(BASE_URL + "/GetProductDetailByBarcode?productId=" + barcode)
+  getProductPricesByBarcode(barcode) {
+    return this.fetch(
+      BASE_URL + "/GetProductDetailByBarcode?productId=" + barcode
+    );
   }
 
   fetch(url, options) {
     return fetch(url, options)
       .then(this.handleResponse)
-      .then((response) => {
+      .then(response => {
         return response;
       })
-      .catch((error) => {
+      .catch(error => {
         const typeError = error instanceof TypeError;
         if (typeError) {
-          console.log(error)
+          console.log(error);
         }
         return Promise.reject(error);
       });
@@ -27,16 +28,19 @@ class Api {
 
   handleResponse(response) {
     return new Promise((resolve, reject) => {
-      response.json().then((jsonBody) => {
-        if (response.ok) {
-          return resolve(jsonBody);
-        }
-        return reject({
-          status: response.status,
-          headers: response.headers,
-          body: jsonBody
-        });
-      }).catch(() => (response.ok ? resolve(response) : reject(response)));
+      response
+        .json()
+        .then(jsonBody => {
+          if (response.ok) {
+            return resolve(jsonBody);
+          }
+          return reject({
+            status: response.status,
+            headers: response.headers,
+            body: jsonBody
+          });
+        })
+        .catch(() => (response.ok ? resolve(response) : reject(response)));
     });
   }
 }
