@@ -14,6 +14,7 @@ import { getProducts } from "../actions/product";
 
 import ProductView from "../components/productView";
 import WaitingIndicator from "../components/waitingIndicator";
+import Basket from "../components/basket";
 
 
 class ProductListPage extends React.Component {
@@ -60,23 +61,24 @@ class ProductListPage extends React.Component {
   
   renderView = () => (
     <View style={{ flex: 1 }}>
-        <TextInput
-          autoFocus
-          style={{height: 40, backgroundColor: "#fff"}}
-          onChangeText={this.onSearchInputChanged}
-          value={this.state.keyword}
-          placeholder="Ara"
+      <Basket />
+      <TextInput
+        autoFocus
+        style={{height: 40, backgroundColor: "#fff"}}
+        onChangeText={this.onSearchInputChanged}
+        value={this.state.keyword}
+        placeholder="Ara"
+      />
+      {
+        this.props.loading ? 
+        this.renderLoadingIndicator() :
+        <FlatList
+          keyExtractor={(item) => item.title}
+          data={this.props.products}
+          renderItem={this.renderItem}
         />
-        {
-          this.props.loading ? 
-          this.renderLoadingIndicator() :
-          <FlatList
-            keyExtractor={(item) => item.title}
-            data={this.props.products}
-            renderItem={this.renderItem}
-          />
-        }
-      </View>
+      }
+    </View>
   )
 
   render() {

@@ -3,26 +3,31 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Image,
-  Button
+  Button,
+  AsyncStorage
 } from "react-native";
 
 import { connect } from 'react-redux';
 import { SafeAreaView } from "react-navigation";
 import { BarCodeScanner, Permissions } from 'expo';
 
+import { getProductsFromBasket, setSavedBasketToStore, clean } from "../actions/basket" 
+
+import Basket from "../components/basket";
+
 class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: "Home",
       headerRight: (
-        <TouchableHighlight
+        <TouchableOpacity
           underlayColor="#fff"
           onPress={() => navigation.navigate('ProductListPage')}
         >
           <Image source={require("../../assets/searchicon.png")} style={{width: 30, height: 30}} />
-        </TouchableHighlight>
+        </TouchableOpacity>
       )
     };
   };
@@ -34,6 +39,13 @@ class Home extends React.Component {
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
+
+    //this.props.clean();
+
+    AsyncStorage.getItem("@basket")
+    .then((data) => {
+      this.props.setSavedBasketToStore(data == null ? [] : data);
+    })
   }
 
   onPressExploreButton = () => {
@@ -46,9 +58,11 @@ class Home extends React.Component {
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;
     }
+
     if (hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
     }
+
     return (
       <SafeAreaView style={{flex: 1}}>
         <View style={{ flex: 1, justifyContent:"space-between" }}>
@@ -62,6 +76,8 @@ class Home extends React.Component {
             title="Ürünlere Göz At"
             onPress={this.onPressExploreButton}
           />
+
+          <Basket />
         </View>
       </SafeAreaView>
     );
@@ -70,16 +86,15 @@ class Home extends React.Component {
   handleBarCodeScanned = ({ type, data }) => {
     this.props.navigation.navigate("ProductDetailPage", { barcode: data });
   }
-
 }
-
-const styles = StyleSheet.create({
-})
 
 const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  getProductsFromBasket,
+  setSavedBasketToStore,
+  clean
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

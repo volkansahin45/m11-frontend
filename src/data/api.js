@@ -1,8 +1,9 @@
 let BASE_URL = "http://192.168.1.192:5001";
 
 class Api {
-  getMostScannedProducts(){
-    return this.fetch(BASE_URL + "/ListBestProducts");
+  getProducts(keyword){
+    //return this.fetch(BASE_URL + "/ListBestProducts");
+    return this.fetch("https://jsonplaceholder.typicode.com/todos/" + keyword);
   }
 
   getProductPricesByBarcode(barcode){
