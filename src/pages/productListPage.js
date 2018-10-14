@@ -32,10 +32,6 @@ class ProductListPage extends React.Component {
     this.props.getProducts(keyword);
   }, 500);
 
-  onClickProduct = () => {
-    alert("onClickProduct");
-  };
-
   renderLoadingIndicator = () => <WaitingIndicator />;
 
   renderError = () => <Text>Problem</Text>;
@@ -62,7 +58,9 @@ class ProductListPage extends React.Component {
           keyExtractor={item => "" + item.Id}
           data={this.props.products}
           renderItem={({ item }) => (
-            <ProductView product={item} onClick={this.onClickProduct} />
+            <ProductView product={item} onClick={() => {
+              this.props.navigation.navigate('ProductDetailPage', { barcode: item.Id })
+            }} />
           )}
         />
       )}
