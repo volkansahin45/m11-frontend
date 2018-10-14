@@ -6,7 +6,8 @@ import {
   GET_PRODUCTS_FAILED,
   GET_PRODUCT_BY_BARCODE_START,
   GET_PRODUCT_BY_BARCODE_SUCCESS,
-  GET_PRODUCT_BY_BARCODE_FAILED
+  GET_PRODUCT_BY_BARCODE_FAILED,
+  LIST_SUPPLIERS
 } from "../actions/product";
 
 const initialState = Map({
@@ -14,6 +15,7 @@ const initialState = Map({
   failed: false,
   products: [],
   productAlternatives: [],
+  suppliers: []
 });
 
 const products = (state = initialState, action) => {
@@ -50,6 +52,9 @@ const products = (state = initialState, action) => {
 
     case GET_PRODUCT_BY_BARCODE_FAILED:
       return state.set("loading", false).set("failed", true);
+
+    case LIST_SUPPLIERS:
+      return state.set("suppliers", action.data);
 
     default:
       return state;

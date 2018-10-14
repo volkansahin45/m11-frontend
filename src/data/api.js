@@ -22,6 +22,21 @@ class Api {
     });
   }
 
+  listSuppliers() {
+    return this.fetch(BASE_URL + "/GetSupplierList");
+  }
+
+  insertProductPrice(data) {
+    return this.fetch(BASE_URL + "/InsertProductPrice", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+  }
+
   fetch(url, options) {
     return fetch(url, options)
       .then(this.handleResponse)

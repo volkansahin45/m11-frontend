@@ -8,6 +8,8 @@ export const GET_PRODUCT_BY_BARCODE_START = "GET_PRODUCT_BY_BARCODE_START";
 export const GET_PRODUCT_BY_BARCODE_SUCCESS = "GET_PRODUCT_BY_BARCODE_SUCCESS";
 export const GET_PRODUCT_BY_BARCODE_FAILED = "GET_PRODUCT_BY_BARCODE_FAIL";
 
+export const LIST_SUPPLIERS = "LIST_SUPPLIERS";
+
 export const getProducts = keyword => dispatch => {
   dispatch({
     type: GET_PRODUCTS_START
@@ -28,7 +30,7 @@ export const getProducts = keyword => dispatch => {
     });
 };
 
-export const getProductPricesByBarcode = (barcode) => dispatch => {
+export const getProductPricesByBarcode = barcode => dispatch => {
   dispatch({
     type: GET_PRODUCT_BY_BARCODE_START
   });
@@ -46,4 +48,13 @@ export const getProductPricesByBarcode = (barcode) => dispatch => {
         error
       });
     });
+};
+
+export const listSuppliers = () => dispatch => {
+  return api.listSuppliers().then(responseJson => {
+    dispatch({
+      type: LIST_SUPPLIERS,
+      data: responseJson
+    });
+  });
 };

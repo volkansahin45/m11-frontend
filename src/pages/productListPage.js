@@ -44,7 +44,7 @@ class ProductListPage extends React.Component {
     <View style={{ flex: 1, padding: 10 }}>
       <Basket onClick={() => this.props.navigation.navigate("BasketPage")} />
       <TextInput
-        autoFocus
+        underlineColorAndroid="#CCCCCC"
         style={{
           height: 40,
           backgroundColor: "#fff",
