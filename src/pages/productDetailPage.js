@@ -17,7 +17,7 @@ import { addProductToBasket } from "../actions/basket";
 import Basket from "../components/basket";
 import basketicon from "../../assets/basketicon.png";
 import Modal from "react-native-modal";
-import api, {BASE_URL} from "../data/api";
+import api, { BASE_URL } from "../data/api";
 import _ from "lodash";
 
 class ProductDetailPage extends React.Component {
@@ -213,7 +213,7 @@ class ProductDetailPage extends React.Component {
             }}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>
-              Fiyatı Ekle
+              Add price
             </Text>
           </View>
         </TouchableOpacity>
@@ -226,8 +226,30 @@ class ProductDetailPage extends React.Component {
     if (productAlternativesLoading) {
       return <ActivityIndicator />;
     }
+
+    let imageUrl;
+    let hasImage = false;
+
+    if (productAlternatives.length > 0) {
+      hasImage = productAlternatives[0].Product.ImageUrl;
+      imageUrl =
+        BASE_URL + "/images/" + productAlternatives[0].Product.ImageUrl;
+    }
+
     return (
       <View style={{ flex: 1, padding: 10 }}>
+        {hasImage && (
+          <Image
+            source={{ uri: imageUrl }}
+            style={{
+              width: 200,
+              height: 200,
+              alignSelf: "center",
+              padding: 5,
+              margin: 5
+            }}
+          />
+        )}
         {productAlternatives.length > 0
           ? this.renderProductAlternatives()
           : this.renderNewProductForm()}
@@ -245,7 +267,7 @@ class ProductDetailPage extends React.Component {
               }}
             >
               <Text style={{ color: "white", fontWeight: "bold" }}>
-                Fiyat Ekle
+                Add Price
               </Text>
             </View>
           </TouchableOpacity>
@@ -301,7 +323,7 @@ class ProductDetailPage extends React.Component {
                 }}
               >
                 <Text style={{ color: "white", fontWeight: "bold" }}>
-                  Fiyatı Ekle
+                  Add Price
                 </Text>
               </View>
             </TouchableOpacity>

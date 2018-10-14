@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     zIndex: 99,
     position: "absolute",
-    bottom: 20,
-    right: 20,
+    bottom: 40,
+    right: 40,
     borderColor: '#CCCCCC',
     borderWidth: 1
   },

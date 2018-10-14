@@ -73,7 +73,7 @@ class Home extends React.Component {
               }}
             >
               <Text style={{ color: "white", fontWeight: "bold" }}>
-                Ürünlere Gözat
+                See Products 
               </Text>
             </View>
           </TouchableOpacity>
