@@ -1,4 +1,4 @@
-let BASE_URL = "http://192.168.1.192:5001";
+export const BASE_URL = "http://192.168.1.192:5001";
 
 class Api {
   getProducts(keyword) {
@@ -33,6 +33,17 @@ class Api {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
+      }
+    });
+  }
+
+  insertProduct(data) {
+    return this.fetch(BASE_URL + "/InsertProduct", {
+      method: "POST",
+      body: data,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data"
       }
     });
   }

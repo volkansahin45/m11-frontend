@@ -7,20 +7,18 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
-  Picker
+  Picker,
+  ActivityIndicator
 } from "react-native";
-
+import { ImagePicker, Permissions } from "expo";
 import { connect } from "react-redux";
-
 import { getProductPricesByBarcode, listSuppliers } from "../actions/product";
 import { addProductToBasket } from "../actions/basket";
-
-import ProductView from "../components/productView";
-import WaitingIndicator from "../components/waitingIndicator";
 import Basket from "../components/basket";
 import basketicon from "../../assets/basketicon.png";
 import Modal from "react-native-modal";
-import api from "../data/api";
+import api, {BASE_URL} from "../data/api";
+import _ from "lodash";
 
 class ProductDetailPage extends React.Component {
   static navigationOptions = {
@@ -32,11 +30,17 @@ class ProductDetailPage extends React.Component {
     this.state = {
       showAddPriceModal: false,
       price: "55",
-      selectedSupplierId: null
+      name: "",
+      selectedSupplierId: null,
+      photoSource: null
     };
   }
 
   componentDidMount() {
+    this.getAlternatives();
+  }
+
+  getAlternatives() {
     const { navigation } = this.props;
     const barcode = navigation.getParam("barcode", null);
     this.props.getProductPricesByBarcode(barcode);
@@ -49,14 +53,6 @@ class ProductDetailPage extends React.Component {
     }
   }
 
-  renderLoadingIndicator = () => <WaitingIndicator />;
-
-  renderError = () => (
-    <View style={{ flex: 1 }}>
-      <Text>Problem</Text>
-    </View>
-  );
-
   addPrice() {
     const data = {
       SupplierId: this.state.selectedSupplierId,
@@ -65,50 +61,195 @@ class ProductDetailPage extends React.Component {
     };
 
     api.insertProductPrice(data).then(r => {
-      const { navigation } = this.props;
-      const barcode = navigation.getParam("barcode", null);
-      this.props.getProductPricesByBarcode(barcode);
-      this.props.listSuppliers();
+      this.getAlternatives();
     });
   }
 
-  render() {
+  renderProductAlternatives() {
     const { productAlternatives } = this.props;
     return (
-      <View style={{ flex: 1, padding: 10 }}>
-        <FlatList
-          keyExtractor={item => "" + item.Id}
-          data={productAlternatives}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => this.props.addProductToBasket(item)}
-            >
-              <View style={styles.containerStyle}>
-                <Text style={{ flex: 1, fontSize: 20 }}>
-                  {item.Supplier.Name} ({item.Price} TL)
-                </Text>
-                <Image style={{ width: 30, height: 30 }} source={basketicon} />
-              </View>
-            </TouchableOpacity>
-          )}
+      <FlatList
+        keyExtractor={item => "" + item.Id}
+        data={productAlternatives}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => this.props.addProductToBasket(item)}>
+            <View style={styles.containerStyle}>
+              <Text style={{ flex: 1, fontSize: 20 }}>
+                {item.Supplier.Name} ({item.Price} TL)
+              </Text>
+              <Image style={{ width: 30, height: 30 }} source={basketicon} />
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    );
+  }
+
+  _handleImagePicked = async () => {
+    const { navigation } = this.props;
+    const barcode = navigation.getParam("barcode", null);
+
+    let uri = this.state.photoSource;
+    let uriParts = uri.split(".");
+    let fileType = uriParts[uriParts.length - 1];
+    let formData = new FormData();
+
+    formData.append("productImage", {
+      uri,
+      name: `photo-${_.random(0, 100)}.${fileType}`,
+      type: `image/${fileType}`
+    });
+
+    formData.append("productId", barcode);
+    formData.append("price", this.state.price);
+    formData.append("supplierId", this.state.selectedSupplierId);
+    formData.append("productName", this.state.name);
+
+    api
+      .insertProduct(formData)
+      .then(r => {
+        this.getAlternatives();
+      })
+      .catch(r => {
+        console.log(r);
+      });
+  };
+
+  renderNewProductForm() {
+    return (
+      <View style={{ backgroundColor: "white", padding: 10, flex: 1 }}>
+        <Text
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 10,
+            color: "green",
+            fontSize: 20
+          }}
+        >
+          No alternative prices found for this barcode, You can add one!
+        </Text>
+        <Text style={{ fontWeight: "bold" }}>Name</Text>
+        <TextInput
+          style={{
+            height: 40,
+            backgroundColor: "#fff",
+            padding: 5,
+            marginBottom: 10
+          }}
+          onChangeText={name => this.setState({ name })}
+          value={this.state.name}
+          underlineColorAndroid="#CCCCCC"
+          placeholder="Name"
         />
-        <Basket onClick={() => this.props.navigation.navigate("BasketPage")} />
+        <Text style={{ fontWeight: "bold" }}>Supplier</Text>
+        <Picker
+          selectedValue={this.state.selectedSupplierId}
+          style={{ height: 50 }}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ selectedSupplierId: itemValue })
+          }
+        >
+          {this.props.suppliers.map(r => (
+            <Picker.Item label={r.Name} value={r.Id} key={"" + r.Id} />
+          ))}
+        </Picker>
+        <Text style={{ fontWeight: "bold" }}>Price</Text>
+        <TextInput
+          keyboardType="numeric"
+          style={{
+            height: 40,
+            backgroundColor: "#fff",
+            padding: 5,
+            marginBottom: 10
+          }}
+          onChangeText={price => {
+            this.setState({ price });
+          }}
+          value={this.state.price}
+          underlineColorAndroid="#CCCCCC"
+          placeholder="Price"
+        />
         <TouchableOpacity
-          onPress={() => this.setState({ showAddPriceModal: true })}
+          style={{ padding: 10, backgroundColor: "#CCCCCC" }}
+          onPress={async () => {
+            const { status: cameraPerm } = await Permissions.askAsync(
+              Permissions.CAMERA
+            );
+
+            const { status: cameraRollPerm } = await Permissions.askAsync(
+              Permissions.CAMERA_ROLL
+            );
+
+            let pickerResult = await ImagePicker.launchCameraAsync({
+              allowsEditing: false,
+              aspect: [4, 3]
+            });
+            this.setState({ photoSource: pickerResult.uri });
+          }}
+        >
+          <View>
+            <Text>Select Photo</Text>
+          </View>
+        </TouchableOpacity>
+        {this.state.photoSource && (
+          <Image
+            style={{ width: 100, height: 100, marginTop: 5 }}
+            source={{ uri: this.state.photoSource }}
+          />
+        )}
+        <TouchableOpacity
+          onPress={async () => {
+            this._handleImagePicked();
+          }}
         >
           <View
             style={{
               height: 60,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "blue"
+              backgroundColor: "blue",
+              marginTop: 5
             }}
           >
             <Text style={{ color: "white", fontWeight: "bold" }}>
-              Fiyat Ekle
+              Fiyatı Ekle
             </Text>
           </View>
         </TouchableOpacity>
+      </View>
+    );
+  }
+
+  render() {
+    const { productAlternatives, productAlternativesLoading } = this.props;
+    if (productAlternativesLoading) {
+      return <ActivityIndicator />;
+    }
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        {productAlternatives.length > 0
+          ? this.renderProductAlternatives()
+          : this.renderNewProductForm()}
+        <Basket onClick={() => this.props.navigation.navigate("BasketPage")} />
+        {productAlternatives.length > 0 && (
+          <TouchableOpacity
+            onPress={() => this.setState({ showAddPriceModal: true })}
+          >
+            <View
+              style={{
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "blue"
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Fiyat Ekle
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <Modal
           isVisible={this.state.showAddPriceModal}
           backdropColor={"#CCCCCC"}
@@ -175,6 +316,7 @@ const mapStateToProps = state => ({
   loading: state.products.get("loading"),
   failed: state.products.get("failed"),
   productAlternatives: state.products.get("productAlternatives"),
+  productAlternativesLoading: state.products.get("productAlternativesLoading"),
   suppliers: state.products.get("suppliers")
 });
 

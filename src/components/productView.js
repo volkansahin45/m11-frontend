@@ -10,6 +10,7 @@ import {
 import { connect } from "react-redux";
 import { addProductToBasket } from "../actions/basket";
 import basketicon from "../../assets/basketicon.png";
+import { BASE_URL } from "../data/api";
 
 class ProductView extends PureComponent {
   render() {
@@ -17,6 +18,12 @@ class ProductView extends PureComponent {
     return (
       <TouchableOpacity onPress={onClick}>
         <View style={styles.containerStyle}>
+          {product.ImageUrl && (
+            <Image
+              style={{ width: 30, height: 30, marginRight: 5 }}
+              source={{ uri: BASE_URL + "/images/" + product.ImageUrl }}
+            />
+          )}
           <Text style={{ flex: 1, fontSize: 20 }}>{product.Name}</Text>
           <TouchableOpacity onPress={() => addProductToBasket(product)}>
             <Image style={{ width: 30, height: 30 }} source={basketicon} />

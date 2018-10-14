@@ -15,6 +15,7 @@ import {
   removeProductFromBasket,
   getCalculatedPriceForBasket
 } from "../actions/basket";
+import { BASE_URL } from "../data/api";
 
 class BasketPage extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -34,6 +35,14 @@ class BasketPage extends React.Component {
             renderItem={({ item }) => (
               <TouchableOpacity>
                 <View style={styles.itemContainer}>
+                  {item.ImageUrl && (
+                    <Image
+                      style={{ width: 30, height: 30, marginRight: 5 }}
+                      source={{
+                        uri: BASE_URL + "/images/" + item.ImageUrl
+                      }}
+                    />
+                  )}
                   <Text style={{ flex: 1, fontSize: 20 }}>{item.Name}</Text>
                   <TouchableOpacity
                     onPress={() => this.props.removeProductFromBasket(item)}

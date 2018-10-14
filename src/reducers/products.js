@@ -15,6 +15,7 @@ const initialState = Map({
   failed: false,
   products: [],
   productAlternatives: [],
+  productAlternativesLoading: false,
   suppliers: []
 });
 
@@ -40,18 +41,18 @@ const products = (state = initialState, action) => {
 
     case GET_PRODUCT_BY_BARCODE_START:
       return state
-        .set("loading", true)
+        .set("productAlternativesLoading", true)
         .set("productAlternatives", [])
         .set("failed", false);
 
     case GET_PRODUCT_BY_BARCODE_SUCCESS:
       return state
-        .set("loading", false)
+        .set("productAlternativesLoading", false)
         .set("productAlternatives", action.data)
         .set("failed", false);
 
     case GET_PRODUCT_BY_BARCODE_FAILED:
-      return state.set("loading", false).set("failed", true);
+      return state.set("productAlternativesLoading", false).set("failed", true);
 
     case LIST_SUPPLIERS:
       return state.set("suppliers", action.data);
