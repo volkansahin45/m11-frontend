@@ -8,7 +8,6 @@ import basketicon from '../../assets/basketicon.png';
 class Basket extends PureComponent {
   render(){
     const { basket, onClick } = this.props;
-    console.log('basket comp:' , basket)
     return (
       <TouchableOpacity style={styles.container} onPress={onClick} >
         <ImageBackground source={basketicon} style={styles.imageBackground}>

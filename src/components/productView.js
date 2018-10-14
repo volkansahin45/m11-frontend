@@ -8,9 +8,7 @@ import {
   StyleSheet
 } from "react-native";
 import { connect } from "react-redux";
-
 import { addProductToBasket } from "../actions/basket";
-
 import basketicon from "../../assets/basketicon.png";
 
 class ProductView extends PureComponent {

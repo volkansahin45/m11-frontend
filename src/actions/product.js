@@ -28,12 +28,12 @@ export const getProducts = keyword => dispatch => {
     });
 };
 
-export const getProductPricesByBarcode = () => dispatch => {
+export const getProductPricesByBarcode = (barcode) => dispatch => {
   dispatch({
     type: GET_PRODUCT_BY_BARCODE_START
   });
   return api
-    .getProductPricesByBarcode()
+    .getProductPricesByBarcode(barcode)
     .then(responseJson => {
       dispatch({
         type: GET_PRODUCT_BY_BARCODE_SUCCESS,

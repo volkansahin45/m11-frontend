@@ -29,7 +29,7 @@ class BasketPage extends React.Component {
       <SafeAreaView style={{ flex: 1, padding: 10 }}>
         <View>
           <FlatList
-            keyExtractor={item => item.Id}
+            keyExtractor={item => "" + item.Id}
             data={basket}
             renderItem={({ item }) => (
               <TouchableOpacity>

@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { Ionicons } from "@expo/vector-icons";
 import { getCalculatedPriceForBasket } from "../actions/basket";
-import _ from 'lodash'
+import _ from "lodash";
 
 class CalculatedPricesPage extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -35,7 +35,10 @@ class CalculatedPricesPage extends React.Component {
   }
 
   render() {
-    const calculatedPrices = _.sortBy(this.props.calculatedPrices, 'TotalPrice').reverse();
+    const calculatedPrices = _.sortBy(
+      this.props.calculatedPrices,
+      "TotalPrice"
+    ).reverse();
     return (
       <SafeAreaView style={{ flex: 1, padding: 10 }}>
         <FlatList
@@ -84,7 +87,7 @@ class CalculatedPricesPage extends React.Component {
         >
           <View style={styles.modalContent}>
             <FlatList
-              keyExtractor={item => item.Product.Id}
+              keyExtractor={item => "" + item.Product.Id}
               data={this.state.selectedSupplier.ProductList}
               renderItem={({ item }) => (
                 <View

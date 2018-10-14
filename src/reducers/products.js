@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map } from "immutable";
 
 import {
   GET_PRODUCTS_START,
@@ -7,49 +7,49 @@ import {
   GET_PRODUCT_BY_BARCODE_START,
   GET_PRODUCT_BY_BARCODE_SUCCESS,
   GET_PRODUCT_BY_BARCODE_FAILED
-} from '../actions/product';
+} from "../actions/product";
 
 const initialState = Map({
   loading: false,
   failed: false,
-  products: null
+  products: [],
+  productAlternatives: [],
 });
 
 const products = (state = initialState, action) => {
   switch (action.type) {
     case GET_PRODUCTS_START:
       return state
-        .set('loading', true)
-        .set("products", null)
-        .set('failed', false)
+        .set("loading", true)
+        .set("products", [])
+        .set("failed", false);
 
     case GET_PRODUCTS_SUCCESS:
       return state
-        .set('loading', false)
+        .set("loading", false)
         .set("products", action.data)
-        .set('failed', false);
+        .set("failed", false);
 
     case GET_PRODUCTS_FAILED:
       return state
-        .set('loading', false)
-        .set('products', null)
-        .set('failed', true);
+        .set("loading", false)
+        .set("products", null)
+        .set("failed", true);
 
     case GET_PRODUCT_BY_BARCODE_START:
       return state
-        .set('loading', true)
-        .set("products", null)
-        .set('failed', false)
+        .set("loading", true)
+        .set("productAlternatives", [])
+        .set("failed", false);
 
     case GET_PRODUCT_BY_BARCODE_SUCCESS:
       return state
-        .set('loading', false)
-        .set('failed', false);
+        .set("loading", false)
+        .set("productAlternatives", action.data)
+        .set("failed", false);
 
     case GET_PRODUCT_BY_BARCODE_FAILED:
-      return state
-        .set('loading', false)
-        .set('failed', true);
+      return state.set("loading", false).set("failed", true);
 
     default:
       return state;

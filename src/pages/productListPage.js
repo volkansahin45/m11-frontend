@@ -59,7 +59,7 @@ class ProductListPage extends React.Component {
         this.renderLoadingIndicator()
       ) : (
         <FlatList
-          keyExtractor={item => item.Id}
+          keyExtractor={item => "" + item.Id}
           data={this.props.products}
           renderItem={({ item }) => (
             <ProductView product={item} onClick={this.onClickProduct} />

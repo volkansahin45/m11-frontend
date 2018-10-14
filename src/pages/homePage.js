@@ -15,7 +15,7 @@ import Basket from "../components/basket";
 class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: "Home",
+      headerTitle: "M11",
       headerRight: (
         <TouchableOpacity
           underlayColor="#fff"
@@ -34,7 +34,7 @@ class Home extends React.Component {
     hasCameraPermission: null
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === "granted" });
   }
@@ -63,7 +63,20 @@ class Home extends React.Component {
               style={StyleSheet.absoluteFill}
             />
           </View>
-          <Button title="Ürünlere Göz At" onPress={this.onPressExploreButton} />
+          <TouchableOpacity onPress={this.onPressExploreButton}>
+            <View
+              style={{
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "blue"
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                Ürünlere Gözat
+              </Text>
+            </View>
+          </TouchableOpacity>
           <Basket
             onClick={() => this.props.navigation.navigate("BasketPage")}
           />

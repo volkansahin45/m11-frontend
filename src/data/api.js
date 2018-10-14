@@ -1,4 +1,4 @@
-let BASE_URL = "http://localhost:5002";
+let BASE_URL = "http://192.168.1.192:5001";
 
 class Api {
   getProducts(keyword) {
