@@ -1,13 +1,15 @@
 import { Map } from "immutable";
 import {
   ADD_PRODUCT_TO_BASKET,
-  REMOVE_PRODUCT_FROM_BASKET
+  REMOVE_PRODUCT_FROM_BASKET,
+  GET_CALCULATED_PRICE_FOR_BASKET,
 } from "../actions/basket";
 
 const initialState = Map({
   loading: false,
   failed: false,
-  basket: []
+  basket: [],
+  calculatedPrices: []
 });
 
 const basket = (state = initialState, action) => {
@@ -30,6 +32,9 @@ const basket = (state = initialState, action) => {
       data = data == null ? [] : data.slice();
       data = data.filter(r => r.Id !== product.Id);
       return state.set("basket", data);
+    }
+    case GET_CALCULATED_PRICE_FOR_BASKET: {
+      return state.set("calculatedPrices", action.data);
     }
     default:
       return state;

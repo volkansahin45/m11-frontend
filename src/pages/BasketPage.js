@@ -11,7 +11,10 @@ import {
 import { connect } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { Ionicons } from "@expo/vector-icons";
-import { removeProductFromBasket } from "../actions/basket";
+import {
+  removeProductFromBasket,
+  getCalculatedPriceForBasket
+} from "../actions/basket";
 
 class BasketPage extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -21,16 +24,17 @@ class BasketPage extends React.Component {
   };
 
   render() {
+    const basket = this.props.basket;
     return (
       <SafeAreaView style={{ flex: 1, padding: 10 }}>
         <View>
           <FlatList
             keyExtractor={item => item.Id}
-            data={this.props.basket}
+            data={basket}
             renderItem={({ item }) => (
               <TouchableOpacity>
                 <View style={styles.itemContainer}>
-                  <Text style={{ flex: 1, fontSize: 17 }}>{item.Name}</Text>
+                  <Text style={{ flex: 1, fontSize: 20 }}>{item.Name}</Text>
                   <TouchableOpacity
                     onPress={() => this.props.removeProductFromBasket(item)}
                   >
@@ -43,6 +47,25 @@ class BasketPage extends React.Component {
               </TouchableOpacity>
             )}
           />
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate("CalculatedPricesPage")
+            }
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "white",
+              padding: 5,
+              marginTop: 10
+            }}
+          >
+            <Ionicons
+              name="ios-color-wand"
+              style={{ color: "green", fontSize: 26, marginRight: 10 }}
+            />
+            <Text style={{ color: "green", fontSize: 22 }}>Teklifleri Al</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -66,7 +89,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  removeProductFromBasket
+  removeProductFromBasket,
+  getCalculatedPriceForBasket
 };
 
 export default connect(

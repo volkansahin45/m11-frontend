@@ -11,6 +11,17 @@ class Api {
     );
   }
 
+  getCalculatedPriceForBasket(productIds) {
+    return this.fetch(BASE_URL + "/GetCalculatedPriceForBasket", {
+      method: "POST",
+      body: JSON.stringify(productIds),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    });
+  }
+
   fetch(url, options) {
     return fetch(url, options)
       .then(this.handleResponse)

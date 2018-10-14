@@ -19,7 +19,7 @@ class ProductView extends PureComponent {
     return (
       <TouchableOpacity onPress={onClick}>
         <View style={styles.containerStyle}>
-          <Text style={{ flex: 1, fontSize: 17 }}>{product.Name}</Text>
+          <Text style={{ flex: 1, fontSize: 20 }}>{product.Name}</Text>
           <TouchableOpacity onPress={() => addProductToBasket(product)}>
             <Image style={{ width: 30, height: 30 }} source={basketicon} />
           </TouchableOpacity>
